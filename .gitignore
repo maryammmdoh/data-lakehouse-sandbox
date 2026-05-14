@@ -1,0 +1,16 @@
+# AIStor license
+minio.license
+
+# Local storage
+data/
+
+# JAR Files
+*.jar
+
+# Dockerfiles
+docker/spark/
+
+# Backup files
+*.save
+*.bak
+scripts/aistor/init-tables.sh

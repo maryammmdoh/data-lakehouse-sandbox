@@ -1,0 +1,53 @@
+services:
+  #Minio-ai-stor
+  aistor-minio:
+    image: quay.io/minio/aistor/minio:latest
+    container_name: aistor-minio-server
+    command: minio server /mnt/data --console-address ":9001" --license /minio.license
+    ports:
+      - "9200:9000"
+      - "9201:9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    volumes:
+      - ./data:/mnt/data
+      - ./minio.license:/minio.license
+
+  aistor-mc:
+    image: quay.io/minio/aistor/mc:latest
+    container_name: aistor-mc
+    depends_on:
+      - aistor-minio
+    volumes:
+      - ./scripts/aistor:/scripts/aistor
+    entrypoint: /bin/sh #To open the shell immediately
+    command: -c "/scripts/aistor/init-warehouse.sh" # This will create automatic wearhouse
+
+  # Spark
+  spark:
+#    image: apache/spark:4.0.0
+    image: maryam811/spark:4.0.0
+    container_name: spark
+    working_dir: /opt/spark
+    volumes:
+      - ./config/spark-config/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ./scripts/spark:/opt/spark/custom-scripts/
+      - ./input-data:/opt/spark/data/input
+      - ./mnt/spark/jobs:/opt/spark/jobs
+    entrypoint: /bin/bash
+    # Interactive Container
+    stdin_open: true
+    tty: true
+
+ #Trino 
+  trino:
+    image: trinodb/trino:480
+    container_name: aistor-trino
+    ports:
+      - "8580:8080"
+    volumes:
+      - ./config/trino-config/catalog:/etc/trino/catalog
+    depends_on:
+      - aistor-minio
+    restart: unless-stopped
