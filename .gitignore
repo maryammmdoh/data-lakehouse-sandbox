@@ -8,9 +8,16 @@ data/
 *.jar
 
 # Dockerfiles
-docker/spark/
+docker/
 
 # Backup files
 *.save
 *.bak
 scripts/aistor/init-tables.sh
+
+# PostgreSQL local data
+input-data/postgres-data/
+./mnt/airflow/postgres_data/
+
+# Airflow dags
+mnt/airflow/dags/
