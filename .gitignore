@@ -21,5 +21,4 @@ input-data/postgres-data/
 
 # Airflow dags
 mnt/airflow/dags/*
-
-mnt/airflow/dags/.gitkeep
+!mnt/airflow/dags/.gitkeep
