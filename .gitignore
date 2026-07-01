@@ -17,7 +17,8 @@ scripts/aistor/init-tables.sh
 
 # PostgreSQL local data
 input-data/postgres-data/
-./mnt/airflow/postgres_data/
+mnt/airflow/postgres_data/
+!mnt/airflow/postgres_data/.gitkeep
 
 # Airflow dags
 mnt/airflow/dags/*
